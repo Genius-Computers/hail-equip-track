@@ -12,7 +12,7 @@ const Header = () => {
   return (
     <header className="bg-card border-b border-border shadow-sm">
       <div className="container mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
+        <div className="flex md:flex-row flex-col md:gap-0 gap-2 md:items-center justify-between">
           <div className="flex items-center space-x-3 rtl:space-x-reverse">
             <div className="bg-primary text-primary-foreground p-2 rounded-lg">
               <Building className="h-6 w-6" />
@@ -22,7 +22,7 @@ const Header = () => {
               <p className="text-sm text-muted-foreground">{t("header.subtitle")}</p>
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center md:justify-normal justify-between gap-4">
             <Button
               variant="outline"
               size="sm"

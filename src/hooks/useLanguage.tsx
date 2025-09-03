@@ -12,8 +12,8 @@ interface LanguageContextType {
 const translations = {
   en: {
     // Header
-    "header.title": "Equipment Maintenance System",
-    "header.subtitle": "University of Ha'il",
+    "header.title": "University of Ha'il",
+    "header.subtitle": "Equipment Maintenance System",
     "header.department": "Maintenance Department",
     "header.facility": "Facility Management",
     
