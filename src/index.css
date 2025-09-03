@@ -112,4 +112,24 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+  
+  .rtl {
+    direction: rtl;
+  }
+  
+  .ltr {
+    direction: ltr;
+  }
+  
+  /* RTL-specific styles */
+  .rtl .ml-auto {
+    margin-left: 0;
+    margin-right: auto;
+  }
+  
+  .rtl .mr-auto {
+    margin-right: 0;
+    margin-left: auto;
+  }
+}
 }

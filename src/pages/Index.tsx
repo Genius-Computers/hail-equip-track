@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Filter } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useLanguage } from "@/hooks/useLanguage";
 
 // Sample data for demonstration
 const initialEquipment = [
@@ -49,6 +50,7 @@ const initialEquipment = [
 ];
 
 const Index = () => {
+  const { t } = useLanguage();
   const [equipment, setEquipment] = useState(initialEquipment);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -95,8 +97,8 @@ const Index = () => {
   const handleScheduleMaintenance = (id: string) => {
     const item = equipment.find(eq => eq.id === id);
     toast({
-      title: "Maintenance Scheduled",
-      description: `Maintenance for ${item?.machineName} has been scheduled.`,
+      title: t("toast.maintenanceScheduled"),
+      description: t("toast.maintenanceScheduledDesc", { name: item?.machineName }),
     });
   };
 
@@ -109,8 +111,8 @@ const Index = () => {
       )
     );
     toast({
-      title: "Spare Parts Approved",
-      description: "Spare parts request has been sent for approval.",
+      title: t("toast.sparePartsApproved"),
+      description: t("toast.sparePartsApprovedDesc"),
     });
   };
 
@@ -131,12 +133,12 @@ const Index = () => {
           <div className="lg:col-span-3 space-y-6">
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                <Search className="absolute left-3 rtl:left-auto rtl:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                 <Input
-                  placeholder="Search equipment..."
+                  placeholder={t("search.placeholder")}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 rtl:pl-4 rtl:pr-10"
                 />
               </div>
               
@@ -144,13 +146,13 @@ const Index = () => {
                 <Filter className="h-4 w-4 text-muted-foreground" />
                 <Select value={statusFilter} onValueChange={setStatusFilter}>
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Filter by status" />
+                    <SelectValue placeholder={t("filter.byStatus")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Equipment</SelectItem>
-                    <SelectItem value="good">Up to Date</SelectItem>
-                    <SelectItem value="due">Due Soon</SelectItem>
-                    <SelectItem value="overdue">Overdue</SelectItem>
+                    <SelectItem value="all">{t("filter.allEquipment")}</SelectItem>
+                    <SelectItem value="good">{t("filter.upToDate")}</SelectItem>
+                    <SelectItem value="due">{t("filter.dueSoon")}</SelectItem>
+                    <SelectItem value="overdue">{t("filter.overdue")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -169,7 +171,7 @@ const Index = () => {
 
             {filteredEquipment.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-muted-foreground">No equipment found matching your criteria.</p>
+                <p className="text-muted-foreground">{t("search.noResults")}</p>
               </div>
             )}
           </div>
