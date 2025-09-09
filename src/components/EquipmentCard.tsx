@@ -1,8 +1,9 @@
-import { Calendar, MapPin, Wrench, AlertTriangle, CheckCircle } from "lucide-react";
+import { MapPin, Wrench, AlertTriangle, CheckCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/hooks/useLanguage";
+import MaintenanceScheduleDialog from "./MaintenanceScheduleDialog";
 
 interface Equipment {
   id: string;
@@ -105,10 +106,10 @@ const EquipmentCard = ({ equipment, onScheduleMaintenance, onUpdateSpares }: Equ
         )}
 
         <div className="flex gap-2 pt-2">
-          <Button size="sm" onClick={() => onScheduleMaintenance(equipment.id)}>
-            <Calendar className="h-4 w-4 mr-1 rtl:mr-0 rtl:ml-1" />
-            {t("equipment.scheduleMaintenance")}
-          </Button>
+          <MaintenanceScheduleDialog 
+            equipmentId={equipment.id}
+            equipmentName={equipment.machineName}
+          />
         </div>
       </CardContent>
     </Card>

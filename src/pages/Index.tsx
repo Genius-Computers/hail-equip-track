@@ -3,9 +3,11 @@ import Header from "@/components/Header";
 import EquipmentCard from "@/components/EquipmentCard";
 import AddEquipmentForm from "@/components/AddEquipmentForm";
 import MaintenanceAlert from "@/components/MaintenanceAlert";
+import SparePartsManager from "@/components/SparePartsManager";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Search, Filter, Package, Wrench } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useLanguage } from "@/hooks/useLanguage";
 
@@ -121,61 +123,80 @@ const Index = () => {
       <Header />
       
       <main className="container mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
-            <AddEquipmentForm onAddEquipment={handleAddEquipment} />
-            
-            <MaintenanceAlert equipment={updateEquipmentStatus(equipment)} />
-          </div>
+        <Tabs defaultValue="equipment" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="equipment" className="flex items-center gap-2">
+              <Wrench className="h-4 w-4" />
+              Equipment Management
+            </TabsTrigger>
+            <TabsTrigger value="spares" className="flex items-center gap-2">
+              <Package className="h-4 w-4" />
+              Spare Parts
+            </TabsTrigger>
+          </TabsList>
 
-          {/* Main Content */}
-          <div className="lg:col-span-3 space-y-6">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 rtl:left-auto rtl:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                <Input
-                  placeholder={t("search.placeholder")}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 rtl:pl-4 rtl:pr-10"
-                />
+          <TabsContent value="equipment" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              {/* Sidebar */}
+              <div className="lg:col-span-1 space-y-6">
+                <AddEquipmentForm onAddEquipment={handleAddEquipment} />
+                
+                <MaintenanceAlert equipment={updateEquipmentStatus(equipment)} />
               </div>
-              
-              <div className="flex items-center gap-2">
-                <Filter className="h-4 w-4 text-muted-foreground" />
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder={t("filter.byStatus")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">{t("filter.allEquipment")}</SelectItem>
-                    <SelectItem value="good">{t("filter.upToDate")}</SelectItem>
-                    <SelectItem value="due">{t("filter.dueSoon")}</SelectItem>
-                    <SelectItem value="overdue">{t("filter.overdue")}</SelectItem>
-                  </SelectContent>
-                </Select>
+
+              {/* Main Content */}
+              <div className="lg:col-span-3 space-y-6">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 rtl:left-auto rtl:right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                    <Input
+                      placeholder={t("search.placeholder")}
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 rtl:pl-4 rtl:pr-10"
+                    />
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <Filter className="h-4 w-4 text-muted-foreground" />
+                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder={t("filter.byStatus")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">{t("filter.allEquipment")}</SelectItem>
+                        <SelectItem value="good">{t("filter.upToDate")}</SelectItem>
+                        <SelectItem value="due">{t("filter.dueSoon")}</SelectItem>
+                        <SelectItem value="overdue">{t("filter.overdue")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {filteredEquipment.map((item) => (
+                    <EquipmentCard
+                      key={item.id}
+                      equipment={item}
+                      onScheduleMaintenance={handleScheduleMaintenance}
+                      onUpdateSpares={handleUpdateSpares}
+                    />
+                  ))}
+                </div>
+
+                {filteredEquipment.length === 0 && (
+                  <div className="text-center py-12">
+                    <p className="text-muted-foreground">{t("search.noResults")}</p>
+                  </div>
+                )}
               </div>
             </div>
+          </TabsContent>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filteredEquipment.map((item) => (
-                <EquipmentCard
-                  key={item.id}
-                  equipment={item}
-                  onScheduleMaintenance={handleScheduleMaintenance}
-                  onUpdateSpares={handleUpdateSpares}
-                />
-              ))}
-            </div>
-
-            {filteredEquipment.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">{t("search.noResults")}</p>
-              </div>
-            )}
-          </div>
-        </div>
+          <TabsContent value="spares">
+            <SparePartsManager />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
